@@ -11,104 +11,67 @@ var T = new Twit({
 
 function retweet() {
   let params = {
-    q: "#altcampus || #Altcampus || @altcampus || @Altcampus || #100DaysOfCode || #codinglife || #webdev || #nodejs || #frontend || #javascript || #js'" ,
-    // count: 100
+    q: '#Altcampus, #altcampus, #100DaysOfCode, #100daysofcode',
+    result_type: 'recent',
+    lang: 'en',
   };
-  T.get("search/tweets", params, (err, data, response) => {
-    let tweets = data.statuses;
-
+  T.get("search/tweets", params, (err, data) => {
     if (!err) {
-      for (let dat of tweets) {
-        let retweetId = dat.id_str;
-        T.post("statuses/retweet/:id", { id: retweetId }, (err, response) => {
-          if (response) console.log("Retweeted!!! " + retweetId);
-          if (err)
-            console.log(
-              "Something went wrong while RETWEETING... Duplication maybe..."
-            );
+      // grab ID of tweet to retweet
+        var retweetId = data.statuses[0].id_str;
+        // Tell TWITTER to retweet
+        T.post('statuses/retweet/:id', {
+            id: retweetId
+        }, function(err, response) {
+            if (response) {
+                console.log('Retweeted!!!');
+            }
+            // if there was an error while tweeting
+            if (err) {
+                console.log('Something went wrong while RETWEETING... Duplication maybe...');
+            }
         });
-      }
+    }
+    // if unable to Search a tweet
+    else {
+      console.log('Something went wrong while SEARCHING...');
     }
   });
 }
+retweet();
 setInterval(retweet, 20000);
 
 
+function ranDom (arr) {
+  var index = Math.floor(Math.random()*arr.length);
+  return arr[index];
+};
 
-
-
-
-
-
-
-// Set up your search parameters for tweets:
-// var params = {
-//     q: '#altcampus',
-//     count: 5,
-//     result_type: 'recent',
-//     lang: 'en'
-//   }
-
-//   // Initiate your search using the above paramaters
 function likeTweets() {
-    var params = {
-    q: '#altcampus || #Altcampus || @altcampus || @Altcampus || #100DaysOfCode || #codinglife || #webdev || #nodejs || #frontend || #javascript || #js',
-    // count: 5,
-    // result_type: 'recent',
-    // lang: 'en'
+    let params = {
+    q:'#Altcampus, #altcampus, #100DaysOfCode, #100daysofcode',
+    result_type: 'recent',
+    lang: 'en'
     }
-    T.get('search/tweets', params, function(err, data, response) {
-        // If there is no error, proceed
-        if(!err){
-        // Loop through the returned tweets
-        for(let i = 0; i < data.statuses.length; i++){
-            // Get the tweet Id from the returned data
-            let id = { id: data.statuses[i].id_str }
-            // Try to Favorite the selected Tweet
-            T.post('favorites/create', id, function(err, response){
-            // If the favorite fails, log the error message
-            if(err){
-                console.log(err);
-            }
-            // If the favorite is successful, log the url of the tweet
-            else{
-                let username = response.user.screen_name;
-                let tweetId = response.id_str;
-                console.log('Favorited: ', `https://twitter.com/${username}/status/${tweetId}`)
-            }
-            });
-        }
-        } else {
-        console.log(err);
-        }
+    T.get('search/tweets', params, function(err, data) {
+      // find tweets
+      var tweet = data.statuses;
+      var randomTweet = ranDom(tweet);   // pick a random tweet
+
+      if(typeof randomTweet != 'undefined'){
+        // Tell TWITTER to 'favorite'
+        T.post('favorites/create', {id: randomTweet.id_str}, function(err, response){
+          // if there was an error while 'favorite'
+          if(err){
+            console.log('Error liking the tweet');
+          }
+          else{
+            console.log('Sucessfully liked the tweet');
+          }
+        });
+      }
     })
 }
-
+likeTweets();
 setInterval(likeTweets, 30000);
 
-// Follow -says thanks when followed.
-// var stream = T.stream('statuses/filter', { track: '@goodbot14' });
-// stream.on('follow', followed);
-
-// function followed(eventMsg) {
-//     console.log("follow event");
-//     tweetIt(`Hi Follower..${eventMsg.source.name} thank you`)
-// }
-
-// setInterval(tweetIt, 1000* 20)
-
-// function tweetIt(tweetText) {
-//     console.log(tweetText);
-//     var tweet = {
-//         status: tweetText,
-//     }
-//     T.post("statuses/update", tweet, tweeted);
-
-//     function tweeted(err, data, response) {
-//         if(err) {
-//             console.log(" something wrong");
-//         } else {
-//             console.log("working!!");
-//         }
-//     }
-// }
