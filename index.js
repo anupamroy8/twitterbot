@@ -69,6 +69,8 @@ function likeTweets() {
             console.log('Sucessfully liked the tweet');
           }
         });
+      } else {
+        console.log('Something went wrong while SEARCHING...');
       }
     })
 }
