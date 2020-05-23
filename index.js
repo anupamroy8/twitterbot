@@ -1,4 +1,4 @@
-console.log("my follow bot");
+console.log("my good bot started @Goodbot14");
 require("dotenv").config();
 var Twit = require("twit");
 
