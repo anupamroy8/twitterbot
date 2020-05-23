@@ -39,11 +39,11 @@ function retweet() {
   });
 }
 retweet();
-setInterval(retweet, 20000);
+setInterval(retweet, 60000);
 
 
 function ranDom (arr) {
-  var index = Math.floor(Math.random()*arr.length);
+  var index = Math.floor(Math.random()*arr.length); 
   return arr[index];
 };
 
@@ -56,8 +56,9 @@ function likeTweets() {
     T.get('search/tweets', params, function(err, data) {
       // find tweets
       var tweet = data.statuses;
+      
       var randomTweet = ranDom(tweet);   // pick a random tweet
-
+      
       if(typeof randomTweet != 'undefined'){
         // Tell TWITTER to 'favorite'
         T.post('favorites/create', {id: randomTweet.id_str}, function(err, response){
@@ -75,5 +76,5 @@ function likeTweets() {
     })
 }
 likeTweets();
-setInterval(likeTweets, 30000);
+setInterval(likeTweets, 50000);
 
