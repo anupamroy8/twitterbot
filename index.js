@@ -11,7 +11,7 @@ var T = new Twit({
 
 function retweet() {
   let params = {
-    q: '#Altcampus, #altcampus, #100DaysOfCode, #100daysofcode',
+    q: '#Altcampus, #altcampus, @altcampus',
     result_type: 'recent',
     lang: 'en',
   };
@@ -49,7 +49,7 @@ function ranDom (arr) {
 
 function likeTweets() {
     let params = {
-    q:'#Altcampus, #altcampus, #100DaysOfCode, #100daysofcode',
+    q:'#Altcampus, #altcampus, @altcampus',
     result_type: 'recent',
     lang: 'en'
     }
